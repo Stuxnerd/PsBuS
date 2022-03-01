@@ -11,7 +11,7 @@
 	Assumptions:
 	 1. Get-TimeStamp: The script needs more than one second to run, so a file with the same timestamp (exact same second) will not exist already!
 .LINK
-	https://github.com/Stuxnerd/-PsBuS
+	https://github.com/Stuxnerd/PsBuS
 .VERSION
 	0.9.1 - 2022-03-02
 .AUTHOR
