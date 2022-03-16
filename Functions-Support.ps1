@@ -7,7 +7,7 @@
 	* Get-TimeStamp
 	* Add-TimeStampToFileName
 	* TestAndCreate-Path
-	* Normalize-Path
+	* Get-NormalizedPath
 	Assumptions:
 	 1. Get-TimeStamp: The script needs more than one second to run, so a file with the same timestamp (exact same second) will not exist already!
 .LINK
@@ -240,7 +240,7 @@ Function TestAndCreate-Path {
 .PARAMETER NoBackslash
 	Switch, if the \shall be deleted instead of added
 #>
-Function Normalize-Path {
+Function Get-NormalizedPath {
 	Param (
 		[Parameter(Mandatory=$true, Position=0)]
 		[String]
