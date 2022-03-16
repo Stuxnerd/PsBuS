@@ -5,23 +5,23 @@
 	This script includes these functions:
 	* Transform-IntTo2DigitString
 	* Get-TimeStamp
-	* Insert-TimeStampToFileName
+	* Add-TimeStampToFileName
 	* TestAndCreate-Path
 	* Normalize-Path
 	Assumptions:
 	 1. Get-TimeStamp: The script needs more than one second to run, so a file with the same timestamp (exact same second) will not exist already!
 .LINK
 	https://github.com/Stuxnerd/PsBuS
-.VERSION
-	0.9.1 - 2022-03-02
-.AUTHOR
-	Stuxnerd
-	If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
-.LICENSE
-	This script is licensed under GNU General Public License version 3.0 (GPLv3).
-	Find more information at http://www.gnu.org/licenses/gpl.html
-.TODO
-	These tasks have to be implemented in the following versions:
+.NOTES
+	VERSION: 0.9.2 - 2022-03-16
+
+	AUTHOR: Stuxnerd
+		If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
+
+	LICENSE: 	This script is licensed under GNU General Public License version 3.0 (GPLv3).
+		Find more information at http://www.gnu.org/licenses/gpl.html
+
+	TODO: These tasks have to be implemented in the following versions:
 	till version 1.0 - additional features, testing and documentation
 	* Wenn Ziel ein Ordner und Quelle eine Datei ist, prüfen, ob der Ordner leer ist – wenn ja löschen sonst Fehler / Farbe: Magenta, um Fehler aufzuzeigen (sollte Funktion Find-FileFolders obsolet machen)
 	* default way to find parent folder
@@ -106,7 +106,7 @@ function Transform-IntTo2DigitString {
 .DESCRIPTION
 	Assumption, that the script needs more than one second to run, so a file with the same timestamp (exact same second) will not exist already! Only if no Filename was used.
 	The format " (yyyy-MM-dd--HH-mm-ss)" correspondes to the regular expression '\s[(][0-9]{4}[-]([0-9]{2}[-]){2}[-]([0-9]{2}[-]){2}[0-9]{2}[)]'.
-	That is used in the funktion Insert-TimeStampToFileName to reset the timestamp.
+	That is used in the function Add-TimeStampToFileName to reset the timestamp.
 .PARAMETER FileName
 	Optional, get the timestamp the file was written the last time
 .TODO
@@ -145,10 +145,10 @@ Function Get-TimeStamp {
 .PARAMETER OverwriteTimestamp 
 	TODO
 .EXAMPLE
-	Insert-TimeStampToFileName "D:\File 3.txt"
+	Add-TimeStampToFileName "D:\File 3.txt"
 	will rename the file to "D:\File 3 (2015-12-12--22-50-49).txt" and return the new file name
 #>
-Function Insert-TimeStampToFileName {
+Function Add-TimeStampToFileName {
 	Param (
 		[Parameter(Mandatory=$true, Position=0)]
 		[String]

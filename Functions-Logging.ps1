@@ -15,16 +15,16 @@
 	* $global:CONSTANT_LogLevel
 .LINK
 	https://github.com/Stuxnerd/PsBuS
-.VERSION
-	0.9.0 - 2022-03-02
-.AUTHOR
-	Stuxnerd
-	If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
-.LICENSE
-	This script is licensed under GNU General Public License version 3.0 (GPLv3).
-	Find more information at http://www.gnu.org/licenses/gpl.html
-.TODO
-	These tasks have to be implemented in the following versions:
+.NOTES
+	VERSION: 0.9.1 - 2022-03-16
+
+	AUTHOR: @Stuxnerd
+		If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
+
+	LICENSE: This script is licensed under GNU General Public License version 3.0 (GPLv3).
+		Find more information at http://www.gnu.org/licenses/gpl.html
+
+	TODO: These tasks have to be implemented in the following versions:
 	till version 1.0 - additional features, testing and documentation
 	* transform logging format to CSV/XML (including timestamp, unique ID per message type)
 	* document features and functions in SourceForge Wiki and in this scipt
@@ -248,15 +248,15 @@ function Reset-LogMessages {
 
 	#rename current logfiles - if they exist
 	if (Test-Path -Path $global:CONSTANT_LogFilePath) {
-		$NewNameForLogFile = Insert-TimeStampToFileName -FileName $global:CONSTANT_LogFilePath
+		$NewNameForLogFile = Add-TimeStampToFileName -FileName $global:CONSTANT_LogFilePath
 		$LogFileExists = $true
 	}
 	if (Test-Path -Path $global:CONSTANT_LogFilePathAll) {
-		$NewNameForLogFileAll = Insert-TimeStampToFileName -FileName $global:CONSTANT_LogFilePathAll
+		$NewNameForLogFileAll = Add-TimeStampToFileName -FileName $global:CONSTANT_LogFilePathAll
 		$LogFileAllExists = $true
 	}
 	if (Test-Path -Path $global:CONSTANT_LogFilePathError) {
-		$NewNameForLogFileError = Insert-TimeStampToFileName -FileName $global:CONSTANT_LogFilePathError
+		$NewNameForLogFileError = Add-TimeStampToFileName -FileName $global:CONSTANT_LogFilePathError
 		$LogFileErrorExists = $true
 	}
 

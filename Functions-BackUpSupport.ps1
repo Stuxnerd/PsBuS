@@ -12,16 +12,16 @@
 	* Move-AllFiles
 .LINK
 	https://github.com/Stuxnerd/PsBuS
-.VERSION
-	0.9.3 - 2022-03-02
-.AUTHOR
-	Stuxnerd
-	If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
-.LICENSE
-	This script is licensed under GNU General Public License version 3.0 (GPLv3).
-	Find more information at http://www.gnu.org/licenses/gpl.html
-.TODO
-	These tasks have to be implemented in the following versions:
+.NOTES
+	VERSION: 0.9.4 - 2022-03-16
+
+	AUTHOR: @Stuxnerd
+		If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
+
+	LICENSE: 	This script is licensed under GNU General Public License version 3.0 (GPLv3).
+		Find more information at http://www.gnu.org/licenses/gpl.html
+
+	TODO: These tasks have to be implemented in the following versions:
 	till version 1.0 - additional features, testing and documentation
 	* Wenn Ziel ein Ordner und Quelle eine Datei ist, prüfen, ob der Ordner leer ist – wenn ja löschen sonst Fehler / Farbe: Magenta, um Fehler aufzuzeigen (sollte Funktion Find-FileFolders obsolet machen)
 	* default way to use trim/add \ for folders + default way to find parent folder
@@ -110,7 +110,7 @@ function Compare-FileHash {
 		[int]$PSVersion = (Get-Host).Version.Major
 		$HashFile1 = $null
 		$HashFile2 = $null
-		if ($version -ge 4) {
+		if ($PSVersion -ge 4) {
 			#new version
 			$HashFile1 = (Get-FileHash -Path $FileName1 -Algorithm MD5).Hash
 			$HashFile2 = (Get-FileHash -Path $FileName2 -Algorithm MD5).Hash
@@ -122,7 +122,7 @@ function Compare-FileHash {
 			Trace-LogMessage -Message "'$FileName1' has hash value '$HashFile1'" -Indent 5 -Level 9
 			Trace-LogMessage -Message "'$FileName2' has hash value '$HashFile2'" -Indent 5 -Level 9
 		}
-		if (($HashFile1 -eq $HashFile2) -and ($HashFile1 -ne $null)) {
+		if (($HashFile1 -eq $HashFile2) -and ($null -ne $HashFile1)) {
 			#the HashValues are equal
 			Trace-LogMessage -Message "'$FileName1' and '$FileName1' have the same hash value" -Indent 5 -Level 10
 			$global:RETURNVALUE_CompareFileHash = $True
@@ -150,6 +150,7 @@ function Compare-FileHash {
 		#The files should not be the same, if the comparrison can not be performed
 		$global:RETURNVALUE_CompareFileHash = $False
 	}
+	Trace-LogMessage -Message "Compare-FileHash returned $global:RETURNVALUE_CompareFileHash" -Indent 1 -Level 10
 }
 
 
@@ -268,7 +269,7 @@ Function Compare-Files {
 			#the result of the comparison is false and further tests will not be performed
 			$StatusOfComparison = $False
 			Trace-LogMessage -Message "'$File1' and '$File2' have a different hash value - they are not equal (but they have the same size and LastWriteTime)!" -Indent 1 -Level 0 -MessageType Warning
-			$global:RETURNVALUE_CompareFile = $False
+			$global:RETURNVALUE_CompareFiles = $False
 			return
 		}
 	} else {
@@ -281,9 +282,10 @@ Function Compare-Files {
 		$global:RETURNVALUE_CompareFiles = $True
 		return
 	}
-
 	#should never occur
 	$global:RETURNVALUE_CompareFiles = $False
+
+	Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles" -Indent 1 -Level 10
 }
 
 
@@ -337,7 +339,7 @@ Function Move-File {
 		if ($AddTimeStamp) {
 			Trace-LogMessage -Message "Add timestamp to file '$FileName'" -Indent 5 -Level 7
 			#rename the file before moving it
-			$FileNameWithTimeStamp = Insert-TimeStampToFileName -FileName $FileName
+			$FileNameWithTimeStamp = Add-TimeStampToFileName -FileName $FileName
 			#test if renaming was successful
 			if (Test-Path -Path $FileNameWithTimeStamp -PathType Leaf) {
 				$FileName = $FileNameWithTimeStamp 
@@ -362,7 +364,7 @@ Function Move-File {
 			if ($ActionIfFileExists -eq "KeepBoth") {
 				#rename the file to be moved using the current timestamp
 				Trace-LogMessage -Message "Add additional timestamp to file '$FileName'" -Indent 5 -Level 5
-				$FileNameWithTimeStamp = Insert-TimeStampToFileName -FileName $FileName -UseCurrentTime -OverwriteTimestamp
+				$FileNameWithTimeStamp = Add-TimeStampToFileName -FileName $FileName -UseCurrentTime -OverwriteTimestamp
 				#test if renaming was successful
 				if (Test-Path -Path $FileNameWithTimeStamp -PathType Leaf) {
 					$FileName = $FileNameWithTimeStamp 

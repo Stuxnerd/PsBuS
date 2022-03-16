@@ -20,16 +20,16 @@
 	* $global:CONSTANT_Path7zipExe2
 .LINK
 	https://github.com/Stuxnerd/PsBuS
-.VERSION
-	0.9.7 - 2022-03-02
-.AUTHOR
-	Stuxnerd
-	If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
-.LICENSE
-	This script is licensed under GNU General Public License version 3.0 (GPLv3).
-	Find more information at http://www.gnu.org/licenses/gpl.html
-.TODO
-	These tasks have to be implemented in the following versions:
+.NOTES
+	VERSION: 0.9.8 - 2022-03-16
+
+	AUTHOR: @Stuxnerd
+		If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
+
+	LICENSE: This script is licensed under GNU General Public License version 3.0 (GPLv3).
+		Find more information at http://www.gnu.org/licenses/gpl.html
+
+	TODO: These tasks have to be implemented in the following versions:
 	till version 1.0 - additional features, testing and documentation
 	* Wenn Ziel ein Ordner und Quelle eine Datei ist, prüfen, ob der Ordner leer ist – wenn ja löschen sonst Fehler / Farbe: Magenta, um Fehler aufzuzeigen (sollte Funktion Find-FileFolders obsolet machen)
 	* default way to use trim/add \ for folders + default way to find parent folder
@@ -182,7 +182,7 @@ Function Backup-OneNote {
 			[String]$LastModified = $notebook.lastModifiedTime.Replace(":","-") #date of last modification in format "2015-07-20T15:03:03.000Z"
 			#cut of the last characters
 			$LastModified = $LastModified.Substring(0,19)
-			#adapt the format, so that it is equal to the functions Insert-TimeStampToFileName and Get-TimeStamp
+			#adapt the format, so that it is equal to the functions Add-TimeStampToFileName and Get-TimeStamp
 			$LastModified = $LastModified.Replace("T","--")
 
 			#build file name with timestamp of last modification
@@ -463,7 +463,7 @@ Function Convert-FolderToZip {
 			#execute the processing with 7zip.exe and the arguments/parameters
 			$process = (Start-Process -FilePath $PathExe -ArgumentList $ArgumentList -PassThru -Wait)
 			#TODO: read return code to detect errors
-			Trace-LogMessage -Message "The content of '$SourcePath' was zipped to file '$Destination'" -Indent 3 -Level 1 -MessageType Confirmation
+			Trace-LogMessage -Message "The content of '$SourcePath' was zipped to file '$Destination' with return value $process" -Indent 3 -Level 1 -MessageType Confirmation
 			#return the filename of the 7z file, which was created
 			[String]$global:RETURNVALUE_ZipFolder = $Destination
 			return
@@ -513,7 +513,7 @@ Function ZipCopyAndMove-Folder {
 		#zip folder
 		Convert-FolderToZip -SourcePath $SourcePath -ZipMethod 7z -Ultra -ActionIfFileExists Error
 		#rename created zip file
-		$NewFileName = Insert-TimeStampToFileName -FileName $global:RETURNVALUE_ZipFolder
+		$NewFileName = Add-TimeStampToFileName -FileName $global:RETURNVALUE_ZipFolder
 
 		#copy, if requested
 		if ($CopyPath -ne "") {
