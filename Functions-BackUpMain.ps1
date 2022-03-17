@@ -48,9 +48,9 @@
 	* use transactions to prevent curruption during file transfers
 #>
 
-#####################################
-#USAGE OF EXTERNAL FUNCTION PACKAGES#
-#####################################
+###########################################
+#INTEGRATION OF EXTERNAL FUNCTION PACKAGES#
+###########################################
 
 . ../PsBuS/Functions-BackUpSupport.ps1
 

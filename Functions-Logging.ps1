@@ -33,9 +33,9 @@
 #>
 
 
-#####################################
-#USAGE OF EXTERNAL FUNCTION PACKAGES#
-#####################################
+###########################################
+#INTEGRATION OF EXTERNAL FUNCTION PACKAGES#
+###########################################
 
 . ../PsBuS/Functions-Support.ps1
 

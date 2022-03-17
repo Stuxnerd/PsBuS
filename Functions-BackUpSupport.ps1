@@ -40,9 +40,9 @@
 	* use transactions to prevent curruption during file transfers
 #>
 
-#####################################
-#USAGE OF EXTERNAL FUNCTION PACKAGES#
-#####################################
+###########################################
+#INTEGRATION OF EXTERNAL FUNCTION PACKAGES#
+###########################################
 
 . ../PsBuS/Functions-Logging.ps1
 . ../PsBuS/Functions-Support.ps1
