@@ -126,11 +126,13 @@ function Compare-FileHash {
 			#the HashValues are equal
 			Trace-LogMessage -Message "'$FileName1' and '$FileName1' have the same hash value" -Indent 5 -Level 10
 			$global:RETURNVALUE_CompareFileHash = $True
+			Trace-LogMessage -Message "Compare-FileHash returned $global:RETURNVALUE_CompareFileHash" -Indent 1 -Level 10
 			return
 		} else {
 			#the HashValues are not equal
 			Trace-LogMessage -Message "'$File1' and '$File2' have a different hash value" -Indent 5 -Level 10
 			$global:RETURNVALUE_CompareFileHash = $False
+			Trace-LogMessage -Message "Compare-FileHash returned $global:RETURNVALUE_CompareFileHash" -Indent 1 -Level 10
 			return
 		}
 	} else {
@@ -223,6 +225,7 @@ Function Compare-Files {
 			$global:VARIABLE_ErrorCounter++
 		}
 		[boolean]$global:RETURNVALUE_CompareFiles = $False
+		Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles" -Indent 1 -Level 10
 		return
 	}
 
@@ -236,6 +239,7 @@ Function Compare-Files {
 			$StatusOfComparison = $False
 			Trace-LogMessage -Message "'$File1' and '$File2' have a different size - they are not equal" -Indent 4 -Level 8
 			$global:RETURNVALUE_CompareFiles = $False
+			Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles" -Indent 1 -Level 10
 			return
 		}
 	} else {
@@ -252,6 +256,7 @@ Function Compare-Files {
 			$StatusOfComparison = $False
 			Trace-LogMessage -Message "'$File1' and '$File2' have a different LastWriteTime - they are not equal" -Indent 4 -Level 8
 			$global:RETURNVALUE_CompareFiles = $False
+			Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles" -Indent 1 -Level 10
 			return
 		}
 	} else {
@@ -270,6 +275,7 @@ Function Compare-Files {
 			$StatusOfComparison = $False
 			Trace-LogMessage -Message "'$File1' and '$File2' have a different hash value - they are not equal (but they have the same size and LastWriteTime)!" -Indent 1 -Level 0 -MessageType Warning
 			$global:RETURNVALUE_CompareFiles = $False
+			Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles" -Indent 1 -Level 10
 			return
 		}
 	} else {
@@ -280,12 +286,12 @@ Function Compare-Files {
 	if ($StatusOfComparison) { #test will only be performed, if all former tests were sucessful
 		Trace-LogMessage -Message "'$File1' and '$File2' are equal" -Indent 4 -Level 8
 		$global:RETURNVALUE_CompareFiles = $True
+		Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles" -Indent 1 -Level 10
 		return
 	}
 	#should never occur
 	$global:RETURNVALUE_CompareFiles = $False
-
-	Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles" -Indent 1 -Level 10
+	Trace-LogMessage -Message "Compare-Files returned $global:RETURNVALUE_CompareFiles (should not been occured)" -Indent 1 -Level 1
 }
 
 

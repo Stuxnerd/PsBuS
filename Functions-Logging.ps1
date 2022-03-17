@@ -111,24 +111,24 @@
 #>
 function Trace-LogMessage {
 	Param (
-		[Parameter(Mandatory=$true, Position=0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[String]
 		$Message,
-		[Parameter(Mandatory=$false, Position=1)]
+		[Parameter(Mandatory = $false, Position = 1)]
 		[int]
 		$Indent = 0,
-		[Parameter(Mandatory=$false, Position=2)]
+		[Parameter(Mandatory = $false, Position = 2)]
 		[int]
 		$Level = 10,
-		[Parameter(Mandatory=$false, Position=3)]
-		[ValidateSet('Exception','Error','Warning', 'Confirmation', 'Info')]
+		[Parameter(Mandatory = $false, Position = 3)]
+		[ValidateSet('Exception', 'Error', 'Warning', 'Confirmation', 'Info')]
 		$MessageType = 'Info',
-		[Parameter(Mandatory=$false, Position=4)]
+		[Parameter(Mandatory = $false, Position = 4)]
 		[switch]
 		$NoTimeStamp = $false
 	)
 	#the logging will only be performed if the detailed logging is activated or if the level of the log entry is important enough
-	if($global:CONSTANT_ActivateDetailedLogging -or ($global:CONSTANT_LogLevel -ge $Level)) {
+	if ($global:CONSTANT_ActivateDetailedLogging -or ($global:CONSTANT_LogLevel -ge $Level)) {
 		#increment the counter
 		$global:VARIABLE_LogCounter++
 
@@ -143,13 +143,13 @@ function Trace-LogMessage {
 
 		#add the current counter number - assumption (always under 10000)
 		$counter = $global:VARIABLE_LogCounter
-		switch($counter) {
-			{$_ -lt 10} {$LogMessage += "$counter     "; break}
-			{$_ -lt 100} {$LogMessage += "$counter    "; break}
-			{$_ -lt 1000} {$LogMessage += "$counter   "; break}
-			{$_ -lt 10000} {$LogMessage += "$counter  "; break}
-			{$_ -lt 100000} {$LogMessage += "$counter "; break}
-			Default {$LogMessage += "$counter "; break}
+		switch ($counter) {
+			{ $_ -lt 10 } { $LogMessage += "$counter     "; break }
+			{ $_ -lt 100 } { $LogMessage += "$counter    "; break }
+			{ $_ -lt 1000 } { $LogMessage += "$counter   "; break }
+			{ $_ -lt 10000 } { $LogMessage += "$counter  "; break }
+			{ $_ -lt 100000 } { $LogMessage += "$counter "; break }
+			Default { $LogMessage += "$counter "; break }
 		}
 
 		#log the date and time - if not suppressed explicitly
@@ -160,9 +160,11 @@ function Trace-LogMessage {
 		#an exception or error message has an additional text EXCEPTION/ERROR (also for WARNING)
 		if ($MessageType -eq 'Exception') {
 			$LogMessage = $LogMessage + "EXCEPTION: "
-		} elseif ($MessageType -eq 'Error') {
+		}
+		elseif ($MessageType -eq 'Error') {
 			$LogMessage = $LogMessage + "ERROR: "
-		} elseif ($MessageType -eq 'Warning') {
+		}
+		elseif ($MessageType -eq 'Warning') {
 			$LogMessage = $LogMessage + "WARNING: "
 		}
 
@@ -174,14 +176,18 @@ function Trace-LogMessage {
 			#Output to Console - Exception/Errors messages in red, Warnings in yellow, Confirmations in green
 			if (($MessageType -eq 'Error') -or ($MessageType -eq 'Exception')) {
 				Write-Host -Object $LogMessage -ForegroundColor Red
-			} elseif ($MessageType -eq 'Warning') {
+			}
+			elseif ($MessageType -eq 'Warning') {
 				Write-Host -Object $LogMessage -ForegroundColor Yellow
-			} elseif ($MessageType -eq 'Confirmation') {
+			}
+			elseif ($MessageType -eq 'Confirmation') {
 				Write-Host -Object $LogMessage -ForegroundColor Green
-			} else {
+			}
+			else {
 				Write-Host -Object $LogMessage #(white is default)
 			}
-		} else {
+		}
+		else {
 			#no action for irrelevant messages
 		}
 		#Output to logfiles - depending on the level or the message type
@@ -197,7 +203,8 @@ function Trace-LogMessage {
 		if ($global:CONSTANT_ActivateDetailedLogging) {
 			Out-File -FilePath $global:CONSTANT_LogFilePathAll -InputObject $LogMessage -Append
 		}
-	} else {
+	}
+ else {
 		#nothing will happen, if the logging is deactivated or the log level is too high
 	}
 }
@@ -234,7 +241,7 @@ function Trace-LogDefaultData {
 #>
 function Reset-LogMessages {
 	Param (
-		[Parameter(Mandatory=$false, Position=0)]
+		[Parameter(Mandatory = $false, Position = 0)]
 		[String]
 		$BackUpPath = ""
 	)
@@ -274,7 +281,8 @@ function Reset-LogMessages {
 
 	if ($LogFileExists -or $NewNameForLogFileAll -or $NewNameForLogFileError) {
 		Trace-LogMessage -Message "$message" -MessageType Confirmation
-	} else {
+	}
+ else {
 		Trace-LogMessage -Message "No old LogFiles were renamed." -MessageType Confirmation
 	}
 
@@ -297,7 +305,8 @@ function Reset-LogMessages {
 		Trace-LogMessage -Message "'$BackUpPath' was not created" -Indent 0 -Level 0 -MessageType Warning
 	}
 	#move the old log files to the archive - if they exist
-	if ($LogFileExists -and (Test-Path -Path $NewNameForLogFile)) { #thanks to lazy evaluation the Test-Path will only be checked, if the file existed before
+	if ($LogFileExists -and (Test-Path -Path $NewNameForLogFile)) {
+		#thanks to lazy evaluation the Test-Path will only be checked, if the file existed before
 		Move-Item -Path $NewNameForLogFile -Destination $BackUpPath
 		Trace-LogMessage -Message "'$NewNameForLogFile' was moved to '$BackUpPath'"
 	}

@@ -21,7 +21,7 @@
 .LINK
 	https://github.com/Stuxnerd/PsBuS
 .NOTES
-	VERSION: 0.9.8 - 2022-03-16
+	VERSION: 0.9.8 - 2022-03-17
 
 	AUTHOR: @Stuxnerd
 		If you want to support me: bitcoin:19sbTycBKvRdyHhEyJy5QbGn6Ua68mWVwC
@@ -480,6 +480,7 @@ Function Convert-FolderToZip {
 			$global:VARIABLE_ErrorCounter++
 		}
 	}
+	Trace-LogMessage -Message "Convert-FolderToZip returned $global:RETURNVALUE_ZipFolder" -Indent 1 -Level 10
 }
 
 

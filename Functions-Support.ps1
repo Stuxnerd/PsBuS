@@ -3,7 +3,7 @@
 	The script includes several useful functions which are used by several scripts.
 .DESCRIPTION
 	This script includes these functions:
-	* Transform-IntTo2DigitString
+	* Convert-IntTo2DigitString
 	* Get-TimeStamp
 	* Add-TimeStampToFileName
 	* TestAndCreate-Path
@@ -84,16 +84,16 @@
 .PARAMETER Number
 	The imput shall be a number (like a date or time), which has one or two digits
 #>
-function Transform-IntTo2DigitString {
+function Convert-IntTo2DigitString {
 	Param (
-		[Parameter(Mandatory=$true, Position=0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[int]
 		$Number
 	)
 	#distinguish, if the number needs a leading 0
 	if ($Number -lt 10) {
 		#Add a 0, if the number has only one digit
-		return ("0"+$Number)
+		return ("0" + $Number)
 	}
 	#transform to a String
 	return ([String]$Number)
@@ -114,19 +114,20 @@ function Transform-IntTo2DigitString {
 #>
 Function Get-TimeStamp {
 	Param (
-		[Parameter(Mandatory=$false, Position=0)]
+		[Parameter(Mandatory = $false, Position = 0)]
 		[String]
 		$FileName = ""
 	)
 	#current timestamp, if no file as reference (or file does not exists)
 	if ($FileName -eq "" -or -not (Test-Path -Path $FileName -PathType Leaf)) {
-		return '('+(Get-Date -f yyyy-MM-dd--HH-mm-ss)+')'
-	} else {
+		return '(' + (Get-Date -f yyyy-MM-dd--HH-mm-ss) + ')'
+	}
+ else {
 		#timestamp of last time file was written
 		$LastWriteTime = [datetime](Get-ItemProperty -Path $FileName -Name LastWriteTime).lastwritetime
 		#for a better overview all values have two digits (but the year)
-		[String]$LastWriteTimeString = "($($LastWriteTime.Year)-$(Transform-IntTo2DigitString $LastWriteTime.Month)-$(Transform-IntTo2DigitString $LastWriteTime.Day)--" +
-			"$(Transform-IntTo2DigitString $LastWriteTime.Hour)-$(Transform-IntTo2DigitString $LastWriteTime.Minute)-$(Transform-IntTo2DigitString $LastWriteTime.Second))"
+		[String]$LastWriteTimeString = "($($LastWriteTime.Year)-$(Convert-IntTo2DigitString $LastWriteTime.Month)-$(Convert-IntTo2DigitString $LastWriteTime.Day)--" +
+		"$(Convert-IntTo2DigitString $LastWriteTime.Hour)-$(Convert-IntTo2DigitString $LastWriteTime.Minute)-$(Convert-IntTo2DigitString $LastWriteTime.Second))"
 		return $LastWriteTimeString		
 	}
 }
@@ -150,13 +151,13 @@ Function Get-TimeStamp {
 #>
 Function Add-TimeStampToFileName {
 	Param (
-		[Parameter(Mandatory=$true, Position=0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[String]
 		$FileName,
-		[Parameter(Mandatory=$false, Position=1)]
+		[Parameter(Mandatory = $false, Position = 1)]
 		[switch]
 		$UseCurrentTime,
-		[Parameter(Mandatory=$false, Position=2)]
+		[Parameter(Mandatory = $false, Position = 2)]
 		[switch]
 		$OverwriteTimestamp
 	)
@@ -173,10 +174,10 @@ Function Add-TimeStampToFileName {
 			#cut the timestamp of the file
 			#if the filename does not contains a timestamp an exception will be thrown
 			try {
-				$Timestamp = $FileName.Substring($TimeStampStart,$TimeStampEnd - $TimeStampStart + 1)
+				$Timestamp = $FileName.Substring($TimeStampStart, $TimeStampEnd - $TimeStampStart + 1)
 				#check if the timestamp matches the regular expression (e. g. " (2015-12-13--20-52-14)")
 				if ($Timestamp -match '\s[(][0-9]{4}[-]([0-9]{2}[-]){2}[-]([0-9]{2}[-]){2}[0-9]{2}[)]') {
-					$TemporaryFileName = $FileName.Substring(0,$TimeStampStart) + $FileName.Substring($TimeStampEnd + 1,$FileName.Length - $TimeStampEnd - 1)
+					$TemporaryFileName = $FileName.Substring(0, $TimeStampStart) + $FileName.Substring($TimeStampEnd + 1, $FileName.Length - $TimeStampEnd - 1)
 				}
 				#otherwise: to prevent further errors, the filename will remain and the new timestamp will be added (has been done above)
 			}
@@ -187,21 +188,24 @@ Function Add-TimeStampToFileName {
 		$PositionOfFileExtension = $TemporaryFileName.LastIndexOf('.')
 		#distinguish, if the filestamp from the file or the current filestamp should be used
 		if ($UseCurrentTime) {
-			$NewFileName = $TemporaryFileName.Substring(0,$PositionOfFileExtension) + " " + (Get-TimeStamp) + $TemporaryFileName.Substring($PositionOfFileExtension)
-		} else {
-			$NewFileName = $TemporaryFileName.Substring(0,$PositionOfFileExtension) + " " + (Get-TimeStamp -FileName $FileName) + $TemporaryFileName.Substring($PositionOfFileExtension)
+			$NewFileName = $TemporaryFileName.Substring(0, $PositionOfFileExtension) + " " + (Get-TimeStamp) + $TemporaryFileName.Substring($PositionOfFileExtension)
+		}
+		else {
+			$NewFileName = $TemporaryFileName.Substring(0, $PositionOfFileExtension) + " " + (Get-TimeStamp -FileName $FileName) + $TemporaryFileName.Substring($PositionOfFileExtension)
 		}
 		#ensure, that the new filename does not exist yet
 		if (Test-Path -Path $NewFileName -PathType Leaf) {
 			#if filename exists already: Renaming not possible (return old name)
 			#overwriting the return value to a global variable with the old file name
 			return $FileName
-		} else {
+		}
+		else {
 			Rename-Item -Path $FileName -NewName $NewFileName -Force
 			#return new file name
 			return $NewFileName
 		}
-	} else {
+	}
+ else {
 		#Not able to add time stamp to FileName, because file does not exist (or is a folder)
 		#return old name
 		return $FileName
@@ -219,42 +223,48 @@ Function Add-TimeStampToFileName {
 #>
 Function TestAndCreate-Path {
 	Param (
-		[Parameter(Mandatory=$true, Position=0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[String]
 		$FolderName
 	)
 	#Check, if the folder exists, if not it will be created
-	if(-not (Test-Path -Path $FolderName)) {
+	if (-not (Test-Path -Path $FolderName)) {
 		New-Item $FolderName -ItemType directory | Out-Null
+		Trace-LogMessage -Message "$FolderName was created" -MessageType Info -Level 8
+	} else {
+		Trace-LogMessage -Message "$FolderName did exist" -MessageType Info -Level 8
 	}
 }
 
 
 <#
 .SYNOPSIS
-	TODO
+	Normalized the format of a path string to end with \ or not
 .DESCRIPTION
 	Ensure, that a path ends with a "\" (or even not) - independent of the users input
+	Per default "\" is added.
 .PARAMETER FolderName
-	FullName of the folder
+	FullName of the folder (path)
 .PARAMETER NoBackslash
-	Switch, if the \shall be deleted instead of added
+	Switch, if the "\" shall be deleted instead of added.	
 #>
 Function Get-NormalizedPath {
 	Param (
-		[Parameter(Mandatory=$true, Position=0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[String]
 		$FolderName,
-		[Parameter(Mandatory=$false, Position=1)]
+		[Parameter(Mandatory = $false, Position = 1)]
 		[Switch]
 		$NoBackslash
 	)
 	Process {
 		if ($NoBackslash) {
 			return $FolderName.TrimEnd("\")
-		} elseif ($FolderName.EndsWith("\")) {
+		}
+		elseif ($FolderName.EndsWith("\")) {
 			return $FolderName
-		} else {
+		}
+		else {
 			return $FolderName + "\"
 		}
 	}
